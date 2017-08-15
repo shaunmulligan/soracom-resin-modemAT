@@ -1,22 +1,25 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
+# This is the base for our build step container
+# which has all our build essentials
+FROM resin/raspberry-pi-alpine-node:6.11.1 AS buildstep
 
-MAINTAINER Alexis Susset <alexis@soraocom.io>
+# Copy in package.json, install 
+# and build all node modules
+WORKDIR /usr/src/app
+COPY package.json .
+RUN apt-get update && apt-get install -yq && screen network-manager curl dropbear smstools && JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/*
 
-COPY src/package.json /usr/src/app/package.json
-COPY motd /etc/motd
+# This is our runtime container that will end up
+# running on the device.
+FROM resin/raspberry-pi-alpine-node:6.11.1-slim
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -yq \
-	screen network-manager curl dropbear smstools && \
-	apt-get clean && \
-	JOBS=MAX npm install pm2 -g && \
-	JOBS=MAX npm install --production && \
-	npm cache clean && rm -rf /tmp/*
+# Copy our node_modules into our deployable container context.
+COPY --from=buildstep /usr/src/app/node_modules node_modules
+COPY motd /etc/motd
+COPY . .
 
-# Copy all our source
-COPY src /usr/src/app
-
+# Launch our App.
 CMD modprobe i2c-dev
 
 CMD ["bash", "/usr/src/app/start.sh"]
