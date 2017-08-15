@@ -5,7 +5,7 @@ FROM resin/raspberry-pi-alpine-node:6.11.1 AS buildstep
 # Copy in package.json, install 
 # and build all node modules
 WORKDIR /usr/src/app
-COPY package.json .
+COPY src/package.json .
 RUN apt-get update && apt-get install -yq && screen network-manager curl dropbear smstools && JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/*
 
 # This is our runtime container that will end up
@@ -17,7 +17,7 @@ WORKDIR /usr/src/app
 # Copy our node_modules into our deployable container context.
 COPY --from=buildstep /usr/src/app/node_modules node_modules
 COPY motd /etc/motd
-COPY . .
+COPY src/. .
 
 # Launch our App.
 CMD modprobe i2c-dev
