@@ -1,7 +1,7 @@
 # This is the base for our build step container
 # which has all our build essentials
-#FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
-FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:6.11.1 AS buildstep
+FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim AS buildstep
+#FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:6.11.1 AS buildstep
 
 # Copy in package.json, install 
 # and build all node modules
