@@ -7,7 +7,7 @@ FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim AS buildstep
 # and build all node modules
 WORKDIR /usr/src/app
 COPY src/package.json .
-RUN apt-get update && apt-get install -yq screen network-manager curl dropbear smstools && JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/* && apt-get clean
+RUN apt-get update && apt-get install -yq screen modemmanager curl dropbear smstools && JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/* && apt-get clean
 
 # This is our runtime container that will end up
 # running on the device.
