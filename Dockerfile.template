@@ -1,4 +1,6 @@
-FROM resin/raspberrypi3-node:slim
+# This is the base for our build step container
+# which has all our build essentials
+FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
 
 MAINTAINER Alexis Susset <alexis@soraocom.io>
 
