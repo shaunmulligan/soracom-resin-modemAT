@@ -1,22 +1,16 @@
 # This is the base for our build step container
 # which has all our build essentials
-FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim AS buildstep
-#FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:6.11.1 AS buildstep
+FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
 
 # Copy in package.json, install 
 # and build all node modules
 WORKDIR /usr/src/app
 COPY src/package.json .
-RUN apt-get update && apt-get install -yq screen modemmanager curl dropbear smstools && JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/* && npm install pm2 -g && apt-get clean
-
-# This is our runtime container that will end up
-# running on the device.
-FROM resin/raspberry-pi-alpine-node:6.11.1-slim
+RUN apt-get update && apt-get install -yq screen modemmanager curl dropbear smstools && JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/* && npm install pm2 -g
 
 WORKDIR /usr/src/app
 
 # Copy our node_modules into our deployable container context.
-COPY --from=buildstep /usr/src/app/node_modules node_modules
 COPY motd /etc/motd
 COPY src/. .
 
