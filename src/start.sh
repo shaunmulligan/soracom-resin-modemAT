@@ -6,6 +6,9 @@ modprobe i2c-dev
 systemctl disable ModemManager
 systemctl mask ModemManager
 
+# Setting Network Manager bus so that our client can communicate with it
+export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+
 # Start Dropbear SSHD
 if [[ -n "${SSH_PASSWD}" ]]; then
 	#Set the root password
@@ -45,6 +48,9 @@ pm2 logs --out &
 # Run connection check script every 15mins
 while :
 do
+	# Check Cellular network connection quality
+	mmcli -m 0 --command=AT+CSQ
+	# Sleep until we run our connection check script
 	sleep 900;
 	bash /usr/src/app/reconnect.sh;
 done
