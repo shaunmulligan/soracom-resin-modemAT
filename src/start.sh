@@ -1,5 +1,12 @@
 #!/bin/bash
+#Enable i2c
 modprobe i2c-dev
+
+# Disable Modem Manager daemon in our container (it is running inside of ResinOS)
+systemctl disable ModemManager
+systemctl mask ModemManager
+
+# Start Dropbear SSHD
 if [[ -n "${SSH_PASSWD}" ]]; then
 	#Set the root password
 	echo "root:$SSH_PASSWD" | chpasswd
@@ -7,6 +14,7 @@ if [[ -n "${SSH_PASSWD}" ]]; then
 	dropbear -E -F &
 fi
 
+# Check if we should disable non-cellular connectivity
 if [[ -n "${CELLULAR_ONLY}" ]]; then
 	echo "CELLULAR_ONLY enabled, disabling Ethernet and WiFi"
 	ifconfig wlan0 down
