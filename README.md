@@ -15,19 +15,28 @@ This version of resin.io image also adds support to run AT commands on your Cell
 
 To do so, we install modemmanager apt package during image creation and set the following variable in start.sh:
 `export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket`
+
 With this in place, you can connect to resin remote Terminal and run AT commands as follow:
 `mmcli -m 0 --command=ATCOMMAND`
+
 For example, you could get your SIM card IMSI:
 `mmcli -m 0 --command=AT+CIMI`
+
 Likewise, if you would like to get a list of connected modem, you can run:
 `mmcli -L`
 
+
+
 PS: if you'd like to use this over an ssh connection, you should export the DBUS variable after you login:
 `export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket`
+
 and then run your mmcli commands
+
+
 
 As an usage example, we also added a network connection strength check in start.sh which runs every 900secs
 `mmcli -m 0 --command=AT+CSQ`
+
 The network RSSI (strength) can be read as follow:
 -100 dBm or less: Unacceptable signal, check antenna connection
 -99 dbm to -90 dBm: Weak signal 
