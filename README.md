@@ -53,3 +53,9 @@ The network RSSI (strength) can be read as follow:
 
 
 This has been tested on Huawei MS2131 Dongle but should also work with any modem that exposes a Serial interface to Modem Manager and Network Manager
+
+
+# Credits
+
+Feel free to visit our [Soracom](https://www.soracom.io) website if you'd like to get our Sim card and/or learn more about IoT topics
+Special thanks to the [OpenDoor](https://www.opendoor.com) team for bringing up the idea!
