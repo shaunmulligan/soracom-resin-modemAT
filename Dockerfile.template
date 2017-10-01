@@ -1,6 +1,6 @@
 # This is the base for our build step container
 # which has all our build essentials
-FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
+FROM resin/raspberry-pi3-node:6-slim
 
 MAINTAINER Alexis Susset <alexis@soraocom.io>
 
@@ -10,14 +10,19 @@ COPY motd /etc/motd
 WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -yq \
-	curl dropbear smstools modemmanager network-manager && \
+	curl dropbear smstools && \
 	apt-get clean && \
 	JOBS=MAX npm install pm2 -g && \
 	JOBS=MAX npm install --production && \
 	npm cache clean && rm -rf /tmp/*
 
 # Copy all our source
-COPY src /usr/src/app
+COPY src/app.js /usr/src/app
+COPY src/reconnect.sh /usr/src/app
+COPY src/start.sh /usr/src/app
+COPY src/mmcli /usr/bin/mmcli
+COPY src/mmcli_libs /usr/lib
+COPY src/bashrc /root/.bashrc
 
 CMD modprobe i2c-dev
 

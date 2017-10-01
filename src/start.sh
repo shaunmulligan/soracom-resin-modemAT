@@ -2,10 +2,6 @@
 #Enable i2c
 modprobe i2c-dev
 
-# Disable Modem Manager daemon in our container (it is running inside of ResinOS)
-systemctl disable ModemManager
-systemctl mask ModemManager
-
 # Setting Network Manager bus so that our client can communicate with it
 export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
@@ -49,7 +45,8 @@ pm2 logs --out &
 while :
 do
 	# Check Cellular network connection quality
-	mmcli -m 0 --command=AT+CSQ
+	MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
+	log `mmcli -m ${MODEM_NUMBER} | grep quality`
 	# Sleep until we run our connection check script
 	sleep 900;
 	bash /usr/src/app/reconnect.sh;

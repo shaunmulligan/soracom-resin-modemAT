@@ -1,6 +1,8 @@
 # Soracom's sample resin.io Raspberry Pi Application with Cellular modem AT commands support
+  
+BETA VERSION, only works on RPi 3 for now and doesn't yet rely on Modem Manager package due to systemd conflict with base Resin OS      
 
-In order to use a 3G Dongle with ResinOS 2.x and Soracom, you will have to place the sora-mobile GSM configuration file on your device's SD card in /system-connections/
+In order to use a 3G Dongle with ResinOS 2.x, Raspberry Pi 3 and Soracom, you will have to place the sora-mobile GSM configuration file on your device's SD card in /system-connections/
 Once this is done, connect the Dongle, boot the device and it should come online on your resin.io dashboard
 
 Our sample Raspberry Pi application uses environment variables to enable a couple of useful features which optimise bandwidth usage and leverage Soracom Harvest and Gate services:
@@ -28,7 +30,6 @@ For example, you could get your SIM card IMSI:
 Likewise, if you would like to get a list of connected modem, you can run:
 
 `mmcli -L`
-
 
 
 PS: if you'd like to use this over an ssh connection, you should export the DBUS variable after you login:
