@@ -46,7 +46,7 @@ while :
 do
 	# Check Cellular network connection quality
 	MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
-	log `mmcli -m ${MODEM_NUMBER} | grep quality`
+	echo `mmcli -m ${MODEM_NUMBER} | grep quality`
 	# Sleep until we run our connection check script
 	sleep 900;
 	bash /usr/src/app/reconnect.sh;
