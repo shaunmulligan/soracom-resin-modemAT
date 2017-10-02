@@ -46,12 +46,17 @@ pm2 -s start /usr/src/app/app.js --max-memory-restart 200M &
 pm2 logs --out &
 
 # Run connection check script every 15mins
+# wait indefinitely
 while :
 do
-	# Check Cellular network connection quality
-	MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
-	echo `mmcli -m ${MODEM_NUMBER} | grep quality`
-	# Sleep until we run our connection check script
-	sleep 900;
-	bash /usr/src/app/reconnect.sh;
+	# Log signal quality
+	if [ -n "${WIFI}" ] && [ "${WIFI}" !-eq "1" ]; then
+		mmcli -L | grep Modem
+		if [ $? !-eq 0 ]; then
+			MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
+			echo `mmcli -m ${MODEM_NUMBER} | grep quality`
+		fi
+	fi
+	sleep 300;
+	/usr/src/app/reconnect.sh
 done
