@@ -1,7 +1,6 @@
 # This is the base for our build step container
 # which has all our build essentials
-#FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
-FROM armhf/debian:jessie
+FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
 
 MAINTAINER Alexis Susset <alexis@soraocom.io>
 
@@ -13,8 +12,9 @@ COPY motd /etc/motd
 WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -yq \
-	curl dropbear smstools modemmanager && \
-	apt-get clean && rm -rf /tmp/*
+	curl dropbear smstools  && \
+	apt-get clean && \
+	npm cache clean && rm -rf /tmp/*
 
 RUN systemctl disable ModemManager.service
 RUN systemctl mask ModemManager.service
@@ -27,5 +27,7 @@ COPY src/start.sh /usr/src/app
 COPY src/bashrc /root/.bashrc
 
 RUN chmod +x /usr/src/app/reconnect.sh
+
+CMD modprobe i2c-dev
 
 CMD ["bash", "/usr/src/app/start.sh"]
