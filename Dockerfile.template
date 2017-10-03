@@ -7,29 +7,25 @@ MAINTAINER Alexis Susset <alexis@soraocom.io>
 #switch on systemd init system in container
 ENV INITSYSTEM on
 
-COPY src/package.json /usr/src/app/package.json
 COPY motd /etc/motd
 
 WORKDIR /usr/src/app
 
-
-
 RUN apt-get update && apt-get install -yq \
-	curl dropbear smstools  && \
+	curl dropbear smstools modemmanager && \
 	apt-get clean && \
-	JOBS=MAX npm install pm2 -g && \
-	JOBS=MAX npm install --production && \
 	npm cache clean && rm -rf /tmp/*
 
 RUN systemctl disable ModemManager.service
 RUN systemctl mask ModemManager.service
+RUN systemctl disable ModemManager
+RUN systemctl mask ModemManager
 
 # Copy all our source
-COPY src/app.js /usr/src/app
 COPY src/reconnect.sh /usr/src/app
 COPY src/start.sh /usr/src/app
 COPY src/bashrc /root/.bashrc
 
-CMD modprobe i2c-dev
+RUN chmod +x /usr/src/app/reconnect.sh
 
 CMD ["bash", "/usr/src/app/start.sh"]

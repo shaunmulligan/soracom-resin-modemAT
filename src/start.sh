@@ -33,25 +33,15 @@ else
 	ifconfig wlan0 up
 fi
 
-# Start pm2 process to run app.js forever
-sleep 5
-cd /usr/src/app
-pm2 -s link
-pm2 -s start /usr/src/app/app.js --max-memory-restart 200M &
-# Start showing logs
-pm2 logs --out &
-
 # Run connection check script every 15mins
 # wait indefinitely
 while :
 do
 	# Log signal quality
-	if [ -n "${WIFI}" ] && [ "${WIFI}" !-eq "1" ]; then
-		mmcli -L | grep Modem
-		if [ $? !-eq 0 ]; then
-			MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
-			echo `mmcli -m ${MODEM_NUMBER} | grep quality`
-		fi
+	mmcli -L | grep Modem
+	if [ $? !-eq 0 ]; then
+		MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
+		echo `mmcli -m ${MODEM_NUMBER} | grep quality`
 	fi
 	sleep 300;
 	/usr/src/app/reconnect.sh
