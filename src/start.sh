@@ -5,10 +5,6 @@ modprobe i2c-dev
 # Setting Network Manager bus so that our client can communicate with it
 export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
-systemctl disable ModemManager.service
-systemctl mask ModemManager.service
-
-
 # Start Dropbear SSHD
 if [[ -n "${SSH_PASSWD}" ]]; then
 	#Set the root password

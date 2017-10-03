@@ -4,10 +4,15 @@ FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
 
 MAINTAINER Alexis Susset <alexis@soraocom.io>
 
+#switch on systemd init system in container
+ENV INITSYSTEM on
+
 COPY src/package.json /usr/src/app/package.json
 COPY motd /etc/motd
 
 WORKDIR /usr/src/app
+
+
 
 RUN apt-get update && apt-get install -yq \
 	curl dropbear smstools modemmanager && \
@@ -17,7 +22,6 @@ RUN apt-get update && apt-get install -yq \
 	npm cache clean && rm -rf /tmp/*
 
 RUN systemctl disable ModemManager.service
-
 RUN systemctl mask ModemManager.service
 
 # Copy all our source
