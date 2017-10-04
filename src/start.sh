@@ -38,7 +38,7 @@ fi
 while :
 do
 	# Log signal quality
-	mmcli -L | grep Modem
+	mmcli -L | grep -q Modem
 	if [ $? -eq 0 ]; then
 		MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
 		echo `mmcli -m ${MODEM_NUMBER} | grep quality`
