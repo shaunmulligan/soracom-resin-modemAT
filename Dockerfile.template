@@ -1,6 +1,6 @@
 # This is the base for our build step container
 # which has all our build essentials
-FROM armf/debian:jessie
+FROM armhf/debian:jessie
 
 MAINTAINER Alexis Susset <alexis@soraocom.io>
 
