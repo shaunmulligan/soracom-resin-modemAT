@@ -12,9 +12,8 @@ COPY motd /etc/motd
 WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -yq \
-	curl dropbear smstools modemmanager && \
-	apt-get clean && \
-	npm cache clean && rm -rf /tmp/*
+	curl dropbear smstools modemmanager wireless-tools && \
+	apt-get clean && rm -rf /tmp/*
 
 RUN systemctl disable ModemManager.service
 RUN systemctl mask ModemManager.service

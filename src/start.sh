@@ -42,6 +42,7 @@ do
 	if [ $? -eq 0 ]; then
 		MODEM_NUMBER=`mmcli -L | grep Modem | sed -e 's/\//\ /g' | awk '{print $5}'` 
 		echo `mmcli -m ${MODEM_NUMBER} | grep quality`
+		echo `mmcli -m ${MODEM_NUMBER} --command="AT$CSQ?" | grep quality`
 	fi
 	sleep 300;
 	/usr/src/app/reconnect.sh
