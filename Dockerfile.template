@@ -34,6 +34,4 @@ COPY src/mmcli_libs /usr/lib
 RUN chmod +x /usr/src/app/reconnect.sh
 RUN chmod +x /usr/bin/mmcli
 
-CMD modprobe i2c-dev
-
 CMD ["bash", "/usr/src/app/start.sh"]
