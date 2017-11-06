@@ -34,4 +34,6 @@ COPY src/mmcli_libs /usr/lib
 RUN chmod +x /usr/src/app/reconnect.sh
 RUN chmod +x /usr/bin/mmcli
 
+COPY 77-mm-huawei-net-port-types.rules /lib/udev/rules.d/77-mm-huawei-net-port-types.rules
+
 CMD ["bash", "/usr/src/app/start.sh"]
