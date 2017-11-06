@@ -4,6 +4,10 @@ FROM armhf/debian:jessie
 
 MAINTAINER Alexis Susset <alexis@soraocom.io>
 
+# Override the default entry.sh
+COPY entry.sh /usr/bin/entry.sh 
+RUN chmod +x /usr/bin/entry.sh
+
 #switch on systemd init system in container
 ENV INITSYSTEM on
 
