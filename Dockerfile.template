@@ -1,9 +1,5 @@
-# This is the base for our build step container
-# which has all our build essentials
 # FROM resin/raspberrypi3-debian:jessie
 FROM arm32v7/debian:jessie
-
-MAINTAINER Alexis Susset <alexis@soraocom.io>
 
 # Override the default entry.sh
 COPY entry.sh /usr/bin/entry.sh 
@@ -12,12 +8,10 @@ RUN chmod +x /usr/bin/entry.sh
 #switch on systemd init system in container
 ENV INITSYSTEM on
 
-COPY motd /etc/motd
-
 WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -yq \
-	curl dropbear smstools wireless-tools && \
+	curl smstools wireless-tools && \
 	apt-get clean && rm -rf /tmp/*
 
 RUN systemctl disable ModemManager.service
@@ -26,13 +20,11 @@ RUN systemctl disable ModemManager
 RUN systemctl mask ModemManager
 
 # Copy all our source
-COPY src/reconnect.sh /usr/src/app
 COPY src/start.sh /usr/src/app
 COPY src/bashrc /root/.bashrc
 COPY src/mmcli /usr/bin/mmcli
 COPY src/mmcli_libs /usr/lib
 
-RUN chmod +x /usr/src/app/reconnect.sh
 RUN chmod +x /usr/bin/mmcli
 
 COPY udev-rules/* /lib/udev/rules.d/
