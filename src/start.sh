@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Starting Modem Checker script"
+
 # Setting Network Manager bus so that our client can communicate with it
 export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 

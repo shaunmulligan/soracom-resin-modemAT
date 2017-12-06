@@ -5,9 +5,6 @@ FROM arm32v7/debian:jessie
 COPY entry.sh /usr/bin/entry.sh 
 RUN chmod +x /usr/bin/entry.sh
 
-#switch on systemd init system in container
-ENV INITSYSTEM on
-
 WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -yq \
@@ -28,5 +25,8 @@ COPY src/mmcli_libs /usr/lib
 RUN chmod +x /usr/bin/mmcli
 
 COPY udev-rules/* /lib/udev/rules.d/
+
+# For cellular we have to ensure systemd is off, it messes with things alot.
+ENV INITSYSTEM off
 
 CMD ["bash", "/usr/src/app/start.sh"]
